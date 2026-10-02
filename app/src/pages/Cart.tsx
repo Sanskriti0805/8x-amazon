@@ -2,6 +2,7 @@ import { Link, useNavigate } from 'react-router-dom'
 import { byId } from '../data/products'
 import { useStore, SHIPPING_FREE_THRESHOLD } from '../store/store'
 import { Price } from '../components/bits'
+import ProductImage from '../components/ProductImage'
 
 export default function Cart() {
   const { cart, setQty, removeFromCart, subtotal, cartCount } = useStore()
@@ -40,12 +41,8 @@ export default function Cart() {
             if (!p) return null
             return (
               <div className="cart-line" key={line.id + line.color}>
-                <Link
-                  to={`/p/${p.id}`}
-                  className="cart-thumb"
-                  style={{ background: `linear-gradient(135deg, ${p.tile.from}, ${p.tile.to})` }}
-                >
-                  {p.tile.emoji}
+                <Link to={`/p/${p.id}`} className="cart-thumb">
+                  <ProductImage p={p} size="md" />
                 </Link>
                 <div>
                   <Link to={`/p/${p.id}`}>

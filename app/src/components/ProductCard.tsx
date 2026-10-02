@@ -1,14 +1,17 @@
 import { Link } from 'react-router-dom'
 import type { Product } from '../data/products'
 import { Price, Rating, reviewCount } from './bits'
+import ProductImage, { discountPct } from './ProductImage'
 
-/** Vertical product card for grids and horizontal rails. */
+/** Vertical product card for grids and horizontal rails. Reusable + clickable. */
 export default function ProductCard({ p }: { p: Product }) {
+  const off = discountPct(p)
   return (
     <Link to={`/p/${p.id}`} className="product-card">
-      <div className="pc-thumb" style={{ background: `linear-gradient(135deg, ${p.tile.from}, ${p.tile.to})` }}>
-        <span className="pc-emoji">{p.tile.emoji}</span>
+      <div className="pc-thumb">
+        <ProductImage p={p} size="md" />
         {p.badge && <span className={`pc-badge ${p.badge.includes('Choice') ? 'choice' : ''}`}>{p.badge}</span>}
+        {off && <span className="pc-off">-{off}%</span>}
       </div>
       <div className="pc-body">
         <div className="pc-title">{p.title}</div>

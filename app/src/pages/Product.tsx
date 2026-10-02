@@ -3,6 +3,7 @@ import { Link, useNavigate, useParams } from 'react-router-dom'
 import { byId } from '../data/products'
 import { useStore } from '../store/store'
 import { Price, Rating } from '../components/bits'
+import ProductImage from '../components/ProductImage'
 
 export default function Product() {
   const { id } = useParams()
@@ -22,7 +23,6 @@ export default function Product() {
     )
   }
 
-  const tileBg = { background: `linear-gradient(135deg, ${p.tile.from}, ${p.tile.to})` }
   const deliverCity = address?.city || 'New York 10001'
   const freeShip = p.price >= 35
 
@@ -45,8 +45,8 @@ export default function Product() {
 
       <div className="pdp">
         <div className="pdp-gallery">
-          <div className="pdp-main-img" style={tileBg}>
-            {p.tile.emoji}
+          <div className="pdp-main-img">
+            <ProductImage p={p} size="xl" />
           </div>
         </div>
 

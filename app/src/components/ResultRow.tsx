@@ -1,12 +1,13 @@
 import { Link } from 'react-router-dom'
 import type { Product } from '../data/products'
 import { Price, Rating, reviewCount, swatchColor } from './bits'
+import ProductImage from './ProductImage'
 
 export default function ResultRow({ p }: { p: Product }) {
   return (
     <div className="result-row">
-      <Link to={`/p/${p.id}`} className="result-thumb" style={bg(p)}>
-        {p.tile.emoji}
+      <Link to={`/p/${p.id}`} className="result-thumb">
+        <ProductImage p={p} size="lg" />
       </Link>
       <div>
         {p.badge && <span className={`badge ${p.badge.includes('Choice') ? 'choice' : ''}`}>{p.badge}</span>}
@@ -47,8 +48,4 @@ export default function ResultRow({ p }: { p: Product }) {
       </div>
     </div>
   )
-}
-
-function bg(p: Product) {
-  return { background: `linear-gradient(135deg, ${p.tile.from}, ${p.tile.to})` }
 }
