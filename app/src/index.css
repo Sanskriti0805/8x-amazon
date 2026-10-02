@@ -461,7 +461,22 @@ img { display: block; }
 
 /* ---------- Product page ---------- */
 .pdp { display: grid; grid-template-columns: 1fr 1.2fr 320px; gap: 30px; padding: 20px 0 40px; }
-.pdp-gallery { position: sticky; top: 100px; align-self: start; }
+.pdp-gallery { position: sticky; top: 100px; align-self: start; display: flex; gap: 12px; }
+.pdp-thumbs { display: flex; flex-direction: column; gap: 10px; flex: 0 0 52px; }
+.pdp-thumb {
+  width: 52px;
+  height: 52px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  overflow: hidden;
+  padding: 0;
+  background: none;
+  position: relative;
+  transition: border-color 0.1s ease, box-shadow 0.1s ease;
+}
+.pdp-thumb.sel { border-color: var(--link); box-shadow: 0 0 0 1px var(--link); }
+.pdp-thumb:hover { border-color: var(--link); }
+.pdp-main-img { flex: 1; }
 .pdp-main-img {
   border-radius: 8px;
   aspect-ratio: 1;

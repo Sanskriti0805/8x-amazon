@@ -1,9 +1,13 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Link, useNavigate, useParams } from 'react-router-dom'
-import { byId } from '../data/products'
+import { byId, PRODUCTS } from '../data/products'
 import { useStore } from '../store/store'
 import { Price, Rating } from '../components/bits'
 import ProductImage from '../components/ProductImage'
+import ProductCard from '../components/ProductCard'
+import SectionHeader from '../components/SectionHeader'
+
+const GALLERY_VIEWS = [0, 1, 2, 3]
 
 export default function Product() {
   const { id } = useParams()
@@ -13,6 +17,15 @@ export default function Product() {
   const [color, setColor] = useState(p?.colors[0] ?? '')
   const [qty, setQty] = useState(1)
   const [added, setAdded] = useState(false)
+  const [view, setView] = useState(0)
+
+  // Reset selections when navigating between products.
+  useEffect(() => {
+    setColor(p?.colors[0] ?? '')
+    setQty(1)
+    setView(0)
+    setAdded(false)
+  }, [id, p])
 
   if (!p) {
     return (
@@ -25,6 +38,12 @@ export default function Product() {
 
   const deliverCity = address?.city || 'New York 10001'
   const freeShip = p.price >= 35
+
+  const related = PRODUCTS.filter((x) => x.category === p.category && x.id !== p.id)
+  const recommended = (related.length >= 4 ? related : PRODUCTS.filter((x) => x.id !== p.id))
+    .slice()
+    .sort((a, b) => b.reviews - a.reviews)
+    .slice(0, 6)
 
   function add() {
     addToCart(p!.id, color, qty)
@@ -45,8 +64,21 @@ export default function Product() {
 
       <div className="pdp">
         <div className="pdp-gallery">
+          <div className="pdp-thumbs">
+            {GALLERY_VIEWS.map((vi) => (
+              <button
+                key={vi}
+                className={`pdp-thumb ${vi === view ? 'sel' : ''}`}
+                onMouseEnter={() => setView(vi)}
+                onClick={() => setView(vi)}
+                aria-label={`View ${vi + 1}`}
+              >
+                <ProductImage p={p} size="sm" variant={vi} />
+              </button>
+            ))}
+          </div>
           <div className="pdp-main-img">
-            <ProductImage p={p} size="xl" />
+            <ProductImage p={p} size="xl" variant={view} />
           </div>
         </div>
 
@@ -163,6 +195,17 @@ export default function Product() {
           </p>
         </aside>
       </div>
+
+      <section className="rail-section">
+        <SectionHeader title="Products related to this item" />
+        <div className="rail">
+          {recommended.map((rp) => (
+            <div className="rail-item" key={rp.id}>
+              <ProductCard p={rp} />
+            </div>
+          ))}
+        </div>
+      </section>
     </div>
   )
 }
