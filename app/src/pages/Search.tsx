@@ -1,4 +1,4 @@
-import { useMemo } from 'react'
+import { useMemo, useState } from 'react'
 import { useSearchParams } from 'react-router-dom'
 import { PRODUCTS, type Product } from '../data/products'
 import ResultRow from '../components/ResultRow'
@@ -29,6 +29,7 @@ export default function Search() {
   const k = kRaw.toLowerCase().trim()
   const cat = params.get('cat') ?? ''
   const sort = (params.get('sort') as Sort) || 'featured'
+  const [showFilters, setShowFilters] = useState(false)
   const minRating = Number(params.get('rating') ?? 0)
   const brands = (params.get('brand') ?? '').split(',').filter(Boolean)
   const priceId = params.get('price') ?? ''
@@ -88,6 +89,9 @@ export default function Search() {
 
   return (
     <div className="wrap">
+      <button className="filters-toggle" onClick={() => setShowFilters((v) => !v)} aria-expanded={showFilters}>
+        ☰ Filters{hasFilters ? ' · active' : ''}
+      </button>
       <div className="results-head">
         <span className="results-count">
           {results.length === 0 ? (
@@ -112,7 +116,7 @@ export default function Search() {
       </div>
 
       <div className="results-layout">
-        <aside className="filters">
+        <aside className={`filters ${showFilters ? 'open' : ''}`}>
           {cat && (
             <>
               <h4>Department</h4>
