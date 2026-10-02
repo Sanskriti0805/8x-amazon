@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import { Link, useNavigate, useParams } from 'react-router-dom'
 import { byId, PRODUCTS } from '../data/products'
 import { useStore } from '../store/store'
@@ -14,18 +14,12 @@ export default function Product() {
   const p = id ? byId(id) : undefined
   const { addToCart, address } = useStore()
   const nav = useNavigate()
+  // The route wrapper is keyed by pathname, so this component remounts with
+  // fresh state on every navigation — no manual reset effect needed.
   const [color, setColor] = useState(p?.colors[0] ?? '')
   const [qty, setQty] = useState(1)
   const [added, setAdded] = useState(false)
   const [view, setView] = useState(0)
-
-  // Reset selections when navigating between products.
-  useEffect(() => {
-    setColor(p?.colors[0] ?? '')
-    setQty(1)
-    setView(0)
-    setAdded(false)
-  }, [id, p])
 
   if (!p) {
     return (
