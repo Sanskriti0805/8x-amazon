@@ -1,0 +1,46 @@
+import { useEffect } from 'react'
+import { Route, Routes, useLocation } from 'react-router-dom'
+import Header from './components/Header'
+import Footer from './components/Footer'
+import Home from './pages/Home'
+import Search from './pages/Search'
+import Product from './pages/Product'
+import Cart from './pages/Cart'
+import Checkout from './pages/Checkout'
+import Confirmation from './pages/Confirmation'
+import Orders from './pages/Orders'
+import SignIn from './pages/SignIn'
+
+function ScrollToTop() {
+  const { pathname } = useLocation()
+  useEffect(() => {
+    window.scrollTo(0, 0)
+  }, [pathname])
+  return null
+}
+
+export default function App() {
+  const { pathname } = useLocation()
+  const bare = pathname === '/signin'
+
+  return (
+    <>
+      <ScrollToTop />
+      {!bare && <Header />}
+      <main style={{ minHeight: '60vh' }}>
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/s" element={<Search />} />
+          <Route path="/p/:id" element={<Product />} />
+          <Route path="/cart" element={<Cart />} />
+          <Route path="/checkout" element={<Checkout />} />
+          <Route path="/confirmation" element={<Confirmation />} />
+          <Route path="/orders" element={<Orders />} />
+          <Route path="/signin" element={<SignIn />} />
+          <Route path="*" element={<Home />} />
+        </Routes>
+      </main>
+      {!bare && <Footer />}
+    </>
+  )
+}
