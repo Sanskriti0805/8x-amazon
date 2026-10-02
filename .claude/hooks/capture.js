@@ -145,7 +145,19 @@ function run(inp) {
       if (t.response) {
         fs.appendFileSync(f, entry('RESPONSE', n, sid, t.respTime, model, t.response));
         state.respNum = n;
-      } else break;
+      } else if (i < turns.length - 1) {
+        // A completed earlier turn that produced no final text because it ended
+        // with a tool call (e.g. plan approval, or a clarifying question). Record
+        // a placeholder so capture does not stall on later turns.
+        fs.appendFileSync(
+          f,
+          entry('RESPONSE', n, sid, t.promptTime, model, '(no final text response — this turn ended with a tool call such as a plan approval or a question to the user)'),
+        );
+        state.respNum = n;
+      } else {
+        // Last turn has no response yet; capture it on the next Stop.
+        break;
+      }
     }
     saveState(sid, state);
   }
