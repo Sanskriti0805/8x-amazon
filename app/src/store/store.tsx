@@ -59,6 +59,8 @@ type Store = State & {
   signOut: () => void
   setAddress: (a: Address) => void
   placeOrder: (input: PlaceOrderInput) => Order
+  toast: { msg: string; id: number } | null
+  dismissToast: () => void
 }
 
 const KEY = 'amzn-rebuild-v1'
@@ -92,6 +94,7 @@ const TAX_RATE = 0.08
 
 export function StoreProvider({ children }: { children: ReactNode }) {
   const [state, setState] = useState<State>(load)
+  const [toast, setToast] = useState<{ msg: string; id: number } | null>(null)
 
   useEffect(() => {
     try {
@@ -101,6 +104,8 @@ export function StoreProvider({ children }: { children: ReactNode }) {
     }
   }, [state])
 
+  const dismissToast = useCallback(() => setToast(null), [])
+
   const addToCart = useCallback((id: string, color: string, qty = 1) => {
     setState((s) => {
       const i = s.cart.findIndex((l) => l.id === id && l.color === color)
@@ -109,6 +114,7 @@ export function StoreProvider({ children }: { children: ReactNode }) {
       else cart.push({ id, color, qty })
       return { ...s, cart }
     })
+    setToast({ msg: 'Added to Cart', id: Date.now() })
   }, [])
 
   const setQty = useCallback((id: string, color: string, qty: number) => {
@@ -177,6 +183,8 @@ export function StoreProvider({ children }: { children: ReactNode }) {
     signOut,
     setAddress,
     placeOrder,
+    toast,
+    dismissToast,
   }
 
   return <Ctx.Provider value={value}>{children}</Ctx.Provider>

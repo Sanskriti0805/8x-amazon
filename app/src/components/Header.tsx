@@ -35,7 +35,9 @@ export default function Header() {
         </Link>
 
         <Link to="/cart" className="cart-link" aria-label={`Cart, ${cartCount} items`}>
-          <span className="cart-count">{cartCount}</span>
+          <span className="cart-count" key={cartCount}>
+            {cartCount}
+          </span>
           <span className="cart-icon">🛒</span>
           <span className="cart-word">Cart</span>
         </Link>

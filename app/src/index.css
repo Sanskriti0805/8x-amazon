@@ -183,6 +183,53 @@ select:focus-visible,
   color: var(--accent);
   font-weight: 800;
   font-size: 16px;
+  animation: countPop 0.3s ease;
+}
+@keyframes countPop {
+  0% { transform: scale(1); }
+  40% { transform: scale(1.5); color: #fff; }
+  100% { transform: scale(1); }
+}
+
+/* ---------- Toast ---------- */
+.toast {
+  position: fixed;
+  right: 20px;
+  bottom: 20px;
+  z-index: 200;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: #1d2a1f;
+  color: #fff;
+  padding: 12px 14px;
+  border-radius: 10px;
+  box-shadow: 0 8px 28px rgba(0, 0, 0, 0.3);
+  animation: toastIn 0.28s cubic-bezier(0.2, 0.8, 0.2, 1) both;
+  max-width: calc(100vw - 40px);
+}
+@keyframes toastIn {
+  from { opacity: 0; transform: translateY(16px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.toast-check {
+  background: var(--success);
+  color: #fff;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  font-size: 13px;
+  flex: 0 0 auto;
+}
+.toast-msg { font-weight: 600; font-size: 14px; }
+.toast-link { color: var(--accent); font-weight: 700; font-size: 14px; margin-left: 6px; }
+.toast-link:hover { color: var(--accent-hover); text-decoration: underline; }
+.toast-x { background: none; border: none; color: #bbb; font-size: 20px; line-height: 1; padding: 0 2px; }
+.toast-x:hover { color: #fff; }
+@media (max-width: 500px) {
+  .toast { left: 16px; right: 16px; bottom: 16px; }
 }
 .cart-word { font-weight: 700; font-size: 14px; padding-bottom: 3px; }
 
@@ -568,6 +615,9 @@ select:focus-visible,
 .qtybox .n { padding: 0 10px; min-width: 20px; text-align: center; }
 .subtotal-line { font-size: 18px; text-align: right; padding-top: 12px; }
 .checkout-box .sub { font-size: 18px; margin-top: 10px; }
+.ship-bar { height: 8px; background: #e3e6e6; border-radius: 100px; overflow: hidden; margin: 8px 0 4px; }
+.ship-bar-fill { height: 100%; background: var(--accent); border-radius: 100px; transition: width 0.4s ease; }
+.ship-bar-fill.full { background: var(--success); }
 .delivery-note {
   background: #f0f7f4;
   border: 1px solid #c8e6d8;

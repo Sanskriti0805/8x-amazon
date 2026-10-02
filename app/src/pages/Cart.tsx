@@ -126,6 +126,12 @@ export default function Cart() {
           ) : (
             <p style={{ color: 'var(--success)', fontWeight: 600 }}>✓ Your order qualifies for FREE Shipping.</p>
           )}
+          <div className="ship-bar" aria-hidden>
+            <div
+              className={`ship-bar-fill ${remaining <= 0 ? 'full' : ''}`}
+              style={{ width: `${Math.min(100, (subtotal / SHIPPING_FREE_THRESHOLD) * 100)}%` }}
+            />
+          </div>
 
           <div className="delivery-note">
             🚚 Estimated delivery: <b>{deliveryEstimate()}</b>

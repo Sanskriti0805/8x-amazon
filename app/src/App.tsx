@@ -13,11 +13,35 @@ import OrderDetails from './pages/OrderDetails'
 import SignIn from './pages/SignIn'
 import Account from './pages/Account'
 import RequireAuth from './components/RequireAuth'
+import Toast from './components/Toast'
+import { byId } from './data/products'
 
-function ScrollToTop() {
+const TITLES: Record<string, string> = {
+  '/': 'Amazon — Spend less. Smile more.',
+  '/s': 'Search results',
+  '/cart': 'Shopping Cart',
+  '/checkout': 'Checkout',
+  '/confirmation': 'Order confirmation',
+  '/orders': 'Your Orders',
+  '/account': 'Your Account',
+  '/signin': 'Sign in',
+}
+
+function RouteEffects() {
   const { pathname } = useLocation()
   useEffect(() => {
     window.scrollTo(0, 0)
+    if (pathname === '/') {
+      document.title = 'Amazon — Spend less. Smile more.'
+      return
+    }
+    let title = TITLES[pathname]
+    if (!title && pathname.startsWith('/p/')) {
+      title = byId(pathname.slice(3))?.title ?? 'Product'
+    } else if (!title && pathname.startsWith('/orders/')) {
+      title = 'Order details'
+    }
+    document.title = title ? `${title} · Amazon` : 'Amazon'
   }, [pathname])
   return null
 }
@@ -28,7 +52,8 @@ export default function App() {
 
   return (
     <>
-      <ScrollToTop />
+      <RouteEffects />
+      <Toast />
       {!bare && <Header />}
       <main style={{ minHeight: '60vh' }}>
         <div className="route-fade" key={pathname}>
