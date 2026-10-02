@@ -9,6 +9,7 @@ import Cart from './pages/Cart'
 import Checkout from './pages/Checkout'
 import Confirmation from './pages/Confirmation'
 import Orders from './pages/Orders'
+import OrderDetails from './pages/OrderDetails'
 import SignIn from './pages/SignIn'
 import Account from './pages/Account'
 import RequireAuth from './components/RequireAuth'
@@ -49,6 +50,14 @@ export default function App() {
             element={
               <RequireAuth>
                 <Orders />
+              </RequireAuth>
+            }
+          />
+          <Route
+            path="/orders/:id"
+            element={
+              <RequireAuth>
+                <OrderDetails />
               </RequireAuth>
             }
           />

@@ -20,6 +20,18 @@ export type Order = {
   deliveryEta: string
 }
 
+export const ORDER_STAGES = ['Ordered', 'Shipped', 'Out for delivery', 'Delivered'] as const
+
+/** Derive a plausible delivery status from how long ago the order was placed. */
+export function orderStatus(o: Order): { label: string; step: number; delivered: boolean } {
+  const hours = (Date.now() - new Date(o.date).getTime()) / 36e5
+  let step = 0
+  if (hours >= 72) step = 3
+  else if (hours >= 24) step = 2
+  else if (hours >= 2) step = 1
+  return { label: ORDER_STAGES[step], step, delivered: step === 3 }
+}
+
 export type PlaceOrderInput = {
   last4: string
   addr: Address
@@ -55,7 +67,19 @@ const Ctx = createContext<Store | null>(null)
 function load(): State {
   try {
     const raw = localStorage.getItem(KEY)
-    if (raw) return JSON.parse(raw) as State
+    if (raw) {
+      const s = JSON.parse(raw) as State
+      // Backfill fields added after some orders were already persisted.
+      const rawOrders = (s.orders ?? []) as Partial<Order>[]
+      s.orders = rawOrders.map((o) => ({
+        ...(o as Order),
+        deliveryLabel: o.deliveryLabel ?? 'Standard delivery',
+        deliveryEta: o.deliveryEta ?? 'soon',
+        payMethod: o.payMethod ?? (o.payLast4 && o.payLast4 !== '—' ? 'Credit/Debit Card' : 'Card'),
+        address: { ...(o.address as Address), phone: o.address?.phone ?? '' },
+      }))
+      return s
+    }
   } catch {
     /* ignore */
   }

@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom'
-import { useStore } from '../store/store'
+import { useStore, orderStatus } from '../store/store'
 import { Price } from '../components/bits'
 
 export default function Orders() {
@@ -44,12 +44,19 @@ export default function Orders() {
             <div style={{ marginLeft: 'auto' }}>
               <div className="k">Order #</div>
               <div className="v">{o.id}</div>
+              <Link to={`/orders/${o.id}`} className="note">
+                View order details ›
+              </Link>
             </div>
           </div>
           <div className="order-body">
-            <div style={{ color: 'var(--success)', fontWeight: 700, marginBottom: 10 }}>
-              {o.deliveryLabel} · Arriving {o.deliveryEta} · Paid with {o.payMethod}
-              {o.payLast4 !== '—' ? ` ending ${o.payLast4}` : ''}
+            <div className="flex between items-center" style={{ marginBottom: 10, flexWrap: 'wrap', gap: 8 }}>
+              <span style={{ color: 'var(--success)', fontWeight: 700 }}>
+                {orderStatus(o).delivered ? 'Delivered' : `Arriving ${o.deliveryEta}`}
+              </span>
+              <span className={`status-chip ${orderStatus(o).delivered ? 'delivered' : ''}`}>
+                {orderStatus(o).label}
+              </span>
             </div>
             {o.items.map((it) => (
               <div className="order-item" key={it.id + it.color}>

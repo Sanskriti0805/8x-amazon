@@ -72,10 +72,23 @@ export default function Confirmation() {
             <span>Total:</span>
             <Price value={order.total} />
           </div>
-          <Link to="/orders" className="btn btn-block pill mt16" style={{ display: 'block' }}>
-            View your orders
+
+          <hr className="hr" />
+          <h3 style={{ margin: '0 0 6px' }}>Delivery address</h3>
+          <div className="note">
+            {order.address.name}
+            <br />
+            {order.address.line1}
+            <br />
+            {order.address.city}, {order.address.state} {order.address.zip}
+            <br />
+            {order.address.phone}
+          </div>
+
+          <Link to={`/orders/${order.id}`} className="btn btn-yellow btn-block pill mt16" style={{ display: 'block' }}>
+            View order
           </Link>
-          <Link to="/s" className="btn btn-yellow btn-block pill mt8" style={{ display: 'block' }}>
+          <Link to="/s" className="btn btn-block pill mt8" style={{ display: 'block' }}>
             Continue shopping
           </Link>
         </aside>
