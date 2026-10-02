@@ -532,7 +532,15 @@ img { display: block; }
 .qtybox button:hover { background: #e3e6e6; }
 .qtybox .n { padding: 0 10px; min-width: 20px; text-align: center; }
 .subtotal-line { font-size: 18px; text-align: right; padding-top: 12px; }
-.checkout-box .sub { font-size: 18px; margin-bottom: 12px; }
+.checkout-box .sub { font-size: 18px; margin-top: 10px; }
+.delivery-note {
+  background: #f0f7f4;
+  border: 1px solid #c8e6d8;
+  border-radius: 8px;
+  padding: 8px 10px;
+  font-size: 13px;
+  margin: 10px 0;
+}
 
 /* ---------- Forms / auth ---------- */
 .auth-wrap { max-width: 350px; margin: 24px auto; }
