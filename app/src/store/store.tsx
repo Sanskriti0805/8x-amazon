@@ -3,7 +3,7 @@ import { byId } from '../data/products'
 
 export type CartLine = { id: string; color: string; qty: number }
 export type User = { name: string; email: string }
-export type Address = { name: string; line1: string; city: string; state: string; zip: string }
+export type Address = { name: string; line1: string; city: string; state: string; zip: string; phone: string }
 export type OrderItem = { id: string; title: string; color: string; qty: number; price: number; emoji: string }
 export type Order = {
   id: string
@@ -15,6 +15,18 @@ export type Order = {
   total: number
   address: Address
   payLast4: string
+  payMethod: string
+  deliveryLabel: string
+  deliveryEta: string
+}
+
+export type PlaceOrderInput = {
+  last4: string
+  addr: Address
+  shipping: number
+  payMethod: string
+  deliveryLabel: string
+  deliveryEta: string
 }
 
 type State = {
@@ -34,7 +46,7 @@ type Store = State & {
   signIn: (u: User) => void
   signOut: () => void
   setAddress: (a: Address) => void
-  placeOrder: (last4: string, addr?: Address) => Order
+  placeOrder: (input: PlaceOrderInput) => Order
 }
 
 const KEY = 'amzn-rebuild-v1'
@@ -101,13 +113,13 @@ export function StoreProvider({ children }: { children: ReactNode }) {
   const cartCount = useMemo(() => state.cart.reduce((n, l) => n + l.qty, 0), [state.cart])
 
   const placeOrder = useCallback(
-    (last4: string, addr?: Address): Order => {
+    (input: PlaceOrderInput): Order => {
       const items: OrderItem[] = state.cart.map((l) => {
         const p = byId(l.id)!
         return { id: l.id, title: p.title, color: l.color, qty: l.qty, price: p.price, emoji: p.tile.emoji }
       })
       const sub = items.reduce((s, it) => s + it.price * it.qty, 0)
-      const shipping = sub >= SHIPPING_FREE_THRESHOLD || sub === 0 ? 0 : SHIPPING_FEE
+      const shipping = input.shipping
       const tax = +(sub * TAX_RATE).toFixed(2)
       const order: Order = {
         id: 'AMZ-' + Date.now().toString().slice(-8),
@@ -117,8 +129,11 @@ export function StoreProvider({ children }: { children: ReactNode }) {
         shipping,
         tax,
         total: +(sub + shipping + tax).toFixed(2),
-        address: addr ?? state.address!,
-        payLast4: last4,
+        address: input.addr ?? state.address!,
+        payLast4: input.last4,
+        payMethod: input.payMethod,
+        deliveryLabel: input.deliveryLabel,
+        deliveryEta: input.deliveryEta,
       }
       setState((s) => ({ ...s, orders: [order, ...s.orders], cart: [] }))
       return order

@@ -617,10 +617,60 @@ img { display: block; }
 .account-card-title { font-weight: 700; font-size: 16px; }
 
 /* ---------- Checkout ---------- */
-.checkout-grid { display: grid; grid-template-columns: 1fr 300px; gap: 20px; padding: 16px 0 40px; align-items: start; }
+.checkout-grid { display: grid; grid-template-columns: 1fr 320px; gap: 20px; padding: 16px 0 40px; align-items: start; }
 .co-section { background: #fff; border-radius: 8px; padding: 20px; margin-bottom: 16px; }
 .co-section h2 { font-size: 18px; margin: 0 0 12px; }
-.step-num { color: var(--muted); }
+.co-summary { position: sticky; top: 100px; }
+
+/* Step indicator */
+.steps { list-style: none; display: flex; gap: 8px; padding: 0; margin: 14px 0 18px; flex-wrap: wrap; }
+.step { display: flex; align-items: center; gap: 8px; flex: 1; min-width: 120px; }
+.step-dot {
+  width: 26px; height: 26px; border-radius: 50%;
+  display: grid; place-items: center; font-size: 13px; font-weight: 700;
+  background: #e3e6e6; color: var(--muted); flex: 0 0 auto;
+}
+.step-label { font-size: 14px; color: var(--muted); }
+.step.active .step-dot { background: var(--nav2); color: #fff; }
+.step.active .step-label { color: var(--text); font-weight: 700; }
+.step.done .step-dot { background: var(--success); color: #fff; }
+.step.done .step-label { color: var(--text); }
+
+/* Delivery options */
+.delivery-option {
+  display: flex; align-items: center; gap: 12px;
+  border: 1px solid var(--border); border-radius: 8px;
+  padding: 14px; margin-bottom: 10px; cursor: pointer;
+}
+.delivery-option.sel { border-color: var(--link); box-shadow: 0 0 0 1px var(--link); background: #f5fbfc; }
+.do-main { flex: 1; }
+.do-title { font-weight: 700; }
+.do-fee { font-weight: 700; }
+.do-fee .free { color: var(--success); }
+
+/* Payment */
+.pay-tabs { display: flex; gap: 10px; margin: 12px 0 16px; flex-wrap: wrap; }
+.pay-tab {
+  border: 1px solid var(--border-dark); border-radius: 8px;
+  background: #fff; padding: 10px 14px; font-size: 14px;
+}
+.pay-tab.sel { border-color: var(--link); box-shadow: 0 0 0 1px var(--link); background: #f5fbfc; }
+.card-face {
+  background: linear-gradient(135deg, #232f3e, #37475a);
+  color: #fff; border-radius: 12px; padding: 20px; margin-bottom: 16px;
+  max-width: 360px; box-shadow: 0 6px 18px rgba(15, 17, 17, 0.25);
+}
+.card-chip { width: 40px; height: 28px; border-radius: 6px; background: linear-gradient(135deg, #e6c06a, #b8912f); margin-bottom: 20px; }
+.card-number { font-size: 20px; letter-spacing: 2px; font-family: 'Courier New', monospace; margin-bottom: 18px; }
+.card-row { display: flex; justify-content: space-between; font-size: 12px; letter-spacing: 1px; text-transform: uppercase; opacity: 0.9; }
+.cod-note { background: #f0f7f4; border: 1px solid #c8e6d8; border-radius: 8px; padding: 14px; font-size: 14px; }
+
+/* Review */
+.review-block { border-bottom: 1px solid var(--border); padding: 12px 0; }
+.review-block:last-child { border-bottom: none; }
+.review-head { display: flex; justify-content: space-between; margin-bottom: 4px; }
+
+.co-nav { display: flex; justify-content: space-between; gap: 12px; margin-top: 8px; }
 
 /* ---------- Confirmation ---------- */
 .confirm-hero { background: #fff; border-radius: 8px; padding: 24px; margin: 20px 0; display: flex; gap: 16px; align-items: center; }

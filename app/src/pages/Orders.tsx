@@ -48,7 +48,8 @@ export default function Orders() {
           </div>
           <div className="order-body">
             <div style={{ color: 'var(--success)', fontWeight: 700, marginBottom: 10 }}>
-              Arriving soon · Paid with card ending {o.payLast4}
+              {o.deliveryLabel} · Arriving {o.deliveryEta} · Paid with {o.payMethod}
+              {o.payLast4 !== '—' ? ` ending ${o.payLast4}` : ''}
             </div>
             {o.items.map((it) => (
               <div className="order-item" key={it.id + it.color}>

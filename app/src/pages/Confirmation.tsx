@@ -16,12 +16,6 @@ export default function Confirmation() {
     )
   }
 
-  const eta = new Date(Date.now() + 3 * 864e5).toLocaleDateString('en-US', {
-    weekday: 'long',
-    month: 'long',
-    day: 'numeric',
-  })
-
   return (
     <div className="wrap">
       <div className="confirm-hero">
@@ -32,7 +26,11 @@ export default function Confirmation() {
             Confirmation will be sent to your email. Order <b>{order.id}</b>.
           </p>
           <p style={{ margin: '8px 0 0' }}>
-            Arriving <b>{eta}</b> to {order.address.city}, {order.address.state}
+            {order.deliveryLabel} · Arriving <b>{order.deliveryEta}</b> to {order.address.city}, {order.address.state}
+          </p>
+          <p className="note" style={{ margin: '4px 0 0' }}>
+            Paid with {order.payMethod}
+            {order.payLast4 !== '—' ? ` ending ${order.payLast4}` : ''}
           </p>
         </div>
       </div>
