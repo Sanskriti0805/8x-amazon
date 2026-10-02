@@ -10,6 +10,8 @@ import Checkout from './pages/Checkout'
 import Confirmation from './pages/Confirmation'
 import Orders from './pages/Orders'
 import SignIn from './pages/SignIn'
+import Account from './pages/Account'
+import RequireAuth from './components/RequireAuth'
 
 function ScrollToTop() {
   const { pathname } = useLocation()
@@ -33,9 +35,31 @@ export default function App() {
           <Route path="/s" element={<Search />} />
           <Route path="/p/:id" element={<Product />} />
           <Route path="/cart" element={<Cart />} />
-          <Route path="/checkout" element={<Checkout />} />
+          <Route
+            path="/checkout"
+            element={
+              <RequireAuth>
+                <Checkout />
+              </RequireAuth>
+            }
+          />
           <Route path="/confirmation" element={<Confirmation />} />
-          <Route path="/orders" element={<Orders />} />
+          <Route
+            path="/orders"
+            element={
+              <RequireAuth>
+                <Orders />
+              </RequireAuth>
+            }
+          />
+          <Route
+            path="/account"
+            element={
+              <RequireAuth>
+                <Account />
+              </RequireAuth>
+            }
+          />
           <Route path="/signin" element={<SignIn />} />
           <Route path="*" element={<Home />} />
         </Routes>
