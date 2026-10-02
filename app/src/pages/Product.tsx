@@ -101,7 +101,31 @@ export default function Product() {
                 <li key={i}>{b}</li>
               ))}
             </ul>
-            <p className="note">{p.about}</p>
+            <p className="note">{p.description}</p>
+          </div>
+
+          <hr className="pdp-divider" />
+
+          <div className="specs">
+            <h3>Product details</h3>
+            <table className="spec-table">
+              <tbody>
+                {p.specifications.map((s) => (
+                  <tr key={s.label}>
+                    <th>{s.label}</th>
+                    <td>{s.value}</td>
+                  </tr>
+                ))}
+                <tr>
+                  <th>Brand</th>
+                  <td>{p.brand}</td>
+                </tr>
+                <tr>
+                  <th>Category</th>
+                  <td>{p.category}</td>
+                </tr>
+              </tbody>
+            </table>
           </div>
         </div>
 
@@ -115,7 +139,9 @@ export default function Product() {
           <div className="deliver-to">
             Deliver to <b>{deliverCity}</b>
           </div>
-          <div className="stock">In Stock</div>
+          <div className="stock" style={p.availability.startsWith('Only') ? { color: 'var(--price-red)' } : undefined}>
+            {p.availability}
+          </div>
 
           <select className="qty-sel" value={qty} onChange={(e) => setQty(Number(e.target.value))}>
             {Array.from({ length: 10 }, (_, i) => i + 1).map((n) => (

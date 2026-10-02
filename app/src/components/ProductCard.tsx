@@ -1,11 +1,11 @@
 import { Link } from 'react-router-dom'
-import type { Product } from '../data/products'
+import { type Product, discount } from '../data/products'
 import { Price, Rating, reviewCount } from './bits'
-import ProductImage, { discountPct } from './ProductImage'
+import ProductImage from './ProductImage'
 
 /** Vertical product card for grids and horizontal rails. Reusable + clickable. */
 export default function ProductCard({ p }: { p: Product }) {
-  const off = discountPct(p)
+  const off = discount(p)
   return (
     <Link to={`/p/${p.id}`} className="product-card">
       <div className="pc-thumb">

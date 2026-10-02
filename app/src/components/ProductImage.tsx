@@ -37,8 +37,3 @@ export default function ProductImage({ p, size = 'md' }: { p: Product; size?: Si
     </div>
   )
 }
-
-export function discountPct(p: Product): number | null {
-  if (!p.listPrice || p.listPrice <= p.price) return null
-  return Math.round((1 - p.price / p.listPrice) * 100)
-}

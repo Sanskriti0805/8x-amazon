@@ -1,19 +1,28 @@
+export type Spec = { label: string; value: string }
+
 export type Product = {
   id: string
   title: string
   brand: string
   category: string
   price: number
+  /** Pre-discount price; the strikethrough "List" price. */
   listPrice?: number
   rating: number
+  /** Number of ratings/reviews. */
   reviews: number
   prime: boolean
   badge?: string
   boughtPastMonth?: string
   colors: string[]
+  /** Local, URL-free image source rendered by <ProductImage />. */
   tile: { emoji: string; from: string; to: string }
+  /** Short feature highlights shown under "About this item". */
   bullets: string[]
-  about: string
+  description: string
+  specifications: Spec[]
+  /** Free-text stock state, e.g. "In Stock" or "Only 3 left in stock". */
+  availability: string
 }
 
 export const CATEGORIES = [
@@ -26,6 +35,12 @@ export const CATEGORIES = [
   'Sports',
   'Grocery',
 ] as const
+
+/** Discount percentage off the list price, or null when there is no markdown. */
+export function discount(p: Product): number | null {
+  if (!p.listPrice || p.listPrice <= p.price) return null
+  return Math.round((1 - p.price / p.listPrice) * 100)
+}
 
 const P = (p: Product) => p
 
@@ -50,8 +65,16 @@ export const PRODUCTS: Product[] = [
       'Hi-Res Audio with Big Bass and custom EQ via the app',
       'Transparency mode to stay aware of your surroundings',
     ],
-    about:
+    description:
       'Over-ear Bluetooth headphones tuned for travel and long listening sessions, with deep bass and app-based personalization.',
+    specifications: [
+      { label: 'Form factor', value: 'Over-ear' },
+      { label: 'Connectivity', value: 'Bluetooth 5.3' },
+      { label: 'Battery life', value: 'Up to 60 hours' },
+      { label: 'Noise control', value: 'Hybrid Active Noise Cancelling' },
+      { label: 'Weight', value: '262 g' },
+    ],
+    availability: 'In Stock',
   }),
   P({
     id: 'echo-dot',
@@ -73,7 +96,14 @@ export const PRODUCTS: Product[] = [
       'Temperature sensor automates routines',
       'Built with recycled materials',
     ],
-    about: 'A compact smart speaker with improved audio and Alexa built in for your whole home.',
+    description: 'A compact smart speaker with improved audio and Alexa built in for your whole home.',
+    specifications: [
+      { label: 'Assistant', value: 'Alexa' },
+      { label: 'Speaker', value: '1.73" front-firing' },
+      { label: 'Connectivity', value: 'Wi-Fi, Bluetooth' },
+      { label: 'Sensors', value: 'Temperature' },
+    ],
+    availability: 'In Stock',
   }),
   P({
     id: 'kindle',
@@ -92,7 +122,14 @@ export const PRODUCTS: Product[] = [
       'Waterproof (IPX8) for reading anywhere',
       'Adjustable warm light',
     ],
-    about: 'The reader built for immersion, now faster with a bigger display and warm light.',
+    description: 'The reader built for immersion, now faster with a bigger display and warm light.',
+    specifications: [
+      { label: 'Display', value: '6.8" 300 ppi' },
+      { label: 'Storage', value: '16 GB' },
+      { label: 'Waterproof', value: 'IPX8' },
+      { label: 'Battery', value: 'Up to 10 weeks' },
+    ],
+    availability: 'In Stock',
   }),
   P({
     id: 'instant-pot',
@@ -114,7 +151,14 @@ export const PRODUCTS: Product[] = [
       '13 one-touch smart programs',
       'Dishwasher-safe stainless steel inner pot',
     ],
-    about: 'The multicooker that does the work of seven kitchen appliances in one.',
+    description: 'The multicooker that does the work of seven kitchen appliances in one.',
+    specifications: [
+      { label: 'Capacity', value: '6 Quart' },
+      { label: 'Programs', value: '13 one-touch' },
+      { label: 'Material', value: 'Stainless steel pot' },
+      { label: 'Functions', value: '7-in-1' },
+    ],
+    availability: 'In Stock',
   }),
   P({
     id: 'air-fryer',
@@ -134,7 +178,14 @@ export const PRODUCTS: Product[] = [
       '4 programs: Air Fry, Roast, Reheat, Dehydrate',
       'Wide temperature range 105°F–400°F',
     ],
-    about: 'Guilt-free fried favorites with little to no oil and easy cleanup.',
+    description: 'Guilt-free fried favorites with little to no oil and easy cleanup.',
+    specifications: [
+      { label: 'Capacity', value: '4 Quart' },
+      { label: 'Programs', value: 'Air Fry, Roast, Reheat, Dehydrate' },
+      { label: 'Temp range', value: '105–400°F' },
+      { label: 'Basket', value: 'Ceramic nonstick, dishwasher safe' },
+    ],
+    availability: 'Only 6 left in stock',
   }),
   P({
     id: 'stanley',
@@ -154,7 +205,14 @@ export const PRODUCTS: Product[] = [
       'Fits most car cup holders',
       'Dishwasher safe',
     ],
-    about: 'The tumbler everyone is carrying, built to keep your drink cold all day.',
+    description: 'The tumbler everyone is carrying, built to keep your drink cold all day.',
+    specifications: [
+      { label: 'Capacity', value: '40 oz' },
+      { label: 'Insulation', value: 'Double-wall vacuum' },
+      { label: 'Material', value: '18/8 stainless steel' },
+      { label: 'Lid', value: 'FlowState 3-position' },
+    ],
+    availability: 'In Stock',
   }),
   P({
     id: 'levis',
@@ -174,7 +232,14 @@ export const PRODUCTS: Product[] = [
       '99% cotton, 1% elastane for comfort',
       'Machine washable',
     ],
-    about: 'A wardrobe staple with a classic straight-leg cut that never goes out of style.',
+    description: 'A wardrobe staple with a classic straight-leg cut that never goes out of style.',
+    specifications: [
+      { label: 'Fit', value: 'Regular' },
+      { label: 'Leg', value: 'Straight' },
+      { label: 'Material', value: '99% cotton, 1% elastane' },
+      { label: 'Care', value: 'Machine wash' },
+    ],
+    availability: 'In Stock',
   }),
   P({
     id: 'running-shoe',
@@ -194,7 +259,14 @@ export const PRODUCTS: Product[] = [
       'Breathable mesh upper',
       'Removable sockliner',
     ],
-    about: 'Everyday trail and road running shoes with reliable cushioning and grip.',
+    description: 'Everyday trail and road running shoes with reliable cushioning and grip.',
+    specifications: [
+      { label: 'Cushioning', value: 'Rearfoot GEL' },
+      { label: 'Upper', value: 'Breathable mesh' },
+      { label: 'Outsole', value: 'Trail rubber' },
+      { label: 'Closure', value: 'Lace-up' },
+    ],
+    availability: 'In Stock',
   }),
   P({
     id: 'serum',
@@ -214,7 +286,14 @@ export const PRODUCTS: Product[] = [
       'Developed with dermatologists',
       'Fragrance-free, suitable for sensitive skin',
     ],
-    about: 'A brightening serum that pairs vitamin C with hydrating ceramides.',
+    description: 'A brightening serum that pairs vitamin C with hydrating ceramides.',
+    specifications: [
+      { label: 'Size', value: '1 fl oz' },
+      { label: 'Key actives', value: '10% Vitamin C, Hyaluronic Acid' },
+      { label: 'Skin type', value: 'All, incl. sensitive' },
+      { label: 'Fragrance', value: 'Fragrance-free' },
+    ],
+    availability: 'In Stock',
   }),
   P({
     id: 'lego',
@@ -235,7 +314,14 @@ export const PRODUCTS: Product[] = [
       'Sparks open-ended creative building',
       'Compatible with all LEGO sets',
     ],
-    about: 'A big box of bricks in bright colors to spark hours of open-ended building.',
+    description: 'A big box of bricks in bright colors to spark hours of open-ended building.',
+    specifications: [
+      { label: 'Pieces', value: '484' },
+      { label: 'Colors', value: '35' },
+      { label: 'Age', value: '4+' },
+      { label: 'Compatibility', value: 'All LEGO sets' },
+    ],
+    availability: 'In Stock',
   }),
   P({
     id: 'switch',
@@ -255,7 +341,14 @@ export const PRODUCTS: Product[] = [
       'Enhanced audio and a wide adjustable stand',
       '64 GB internal storage',
     ],
-    about: 'The handheld-and-TV console with a brilliant OLED screen for vivid games on the go.',
+    description: 'The handheld-and-TV console with a brilliant OLED screen for vivid games on the go.',
+    specifications: [
+      { label: 'Screen', value: '7" OLED' },
+      { label: 'Storage', value: '64 GB' },
+      { label: 'Modes', value: 'TV, Tabletop, Handheld' },
+      { label: 'Battery', value: '4.5–9 hours' },
+    ],
+    availability: 'Only 4 left in stock',
   }),
   P({
     id: 'atomic',
@@ -277,7 +370,14 @@ export const PRODUCTS: Product[] = [
       'Over 15 million copies sold',
       'By James Clear',
     ],
-    about: 'A practical, science-backed guide to building good habits and breaking bad ones.',
+    description: 'A practical, science-backed guide to building good habits and breaking bad ones.',
+    specifications: [
+      { label: 'Author', value: 'James Clear' },
+      { label: 'Format', value: 'Hardcover' },
+      { label: 'Pages', value: '320' },
+      { label: 'Publisher', value: 'Avery' },
+    ],
+    availability: 'In Stock',
   }),
   P({
     id: 'water-bottle',
@@ -296,7 +396,14 @@ export const PRODUCTS: Product[] = [
       'Wide mouth fits ice cubes',
       'BPA-free and dishwasher safe',
     ],
-    about: 'A rugged insulated bottle that keeps drinks cold all day.',
+    description: 'A rugged insulated bottle that keeps drinks cold all day.',
+    specifications: [
+      { label: 'Capacity', value: '32 oz' },
+      { label: 'Cold', value: 'Up to 24 hours' },
+      { label: 'Material', value: '18/8 stainless steel' },
+      { label: 'Mouth', value: 'Wide' },
+    ],
+    availability: 'In Stock',
   }),
   P({
     id: 'coffee',
@@ -316,7 +423,14 @@ export const PRODUCTS: Product[] = [
       'Removable drip tray',
       'Energy-saving auto off',
     ],
-    about: 'A slim single-serve brewer that fits almost anywhere on your counter.',
+    description: 'A slim single-serve brewer that fits almost anywhere on your counter.',
+    specifications: [
+      { label: 'Cup sizes', value: '6–12 oz' },
+      { label: 'Width', value: 'Under 5"' },
+      { label: 'Reservoir', value: 'Single cup' },
+      { label: 'Auto-off', value: 'Yes' },
+    ],
+    availability: 'In Stock',
   }),
   P({
     id: 'monitor',
@@ -336,7 +450,14 @@ export const PRODUCTS: Product[] = [
       'NVIDIA G-SYNC compatible',
       'HDR10 with sRGB 99%',
     ],
-    about: 'A fast QHD gaming monitor with smooth motion and vivid color.',
+    description: 'A fast QHD gaming monitor with smooth motion and vivid color.',
+    specifications: [
+      { label: 'Size', value: '27"' },
+      { label: 'Resolution', value: '2560 x 1440' },
+      { label: 'Refresh', value: '165Hz' },
+      { label: 'Response', value: '1ms' },
+    ],
+    availability: 'In Stock',
   }),
   P({
     id: 'backpack',
@@ -355,7 +476,14 @@ export const PRODUCTS: Product[] = [
       'Front utility pocket',
       'Made with recycled fabric',
     ],
-    about: 'The timeless everyday backpack, light and roomy for school or work.',
+    description: 'The timeless everyday backpack, light and roomy for school or work.',
+    specifications: [
+      { label: 'Capacity', value: '25 L' },
+      { label: 'Compartments', value: '1 main + front pocket' },
+      { label: 'Material', value: 'Recycled polyester' },
+      { label: 'Straps', value: 'Padded' },
+    ],
+    availability: 'In Stock',
   }),
   P({
     id: 'mouse',
@@ -376,7 +504,14 @@ export const PRODUCTS: Product[] = [
       'Works across 3 devices with Flow',
       'USB-C fast charging',
     ],
-    about: 'A precise, quiet productivity mouse built for people who work all day.',
+    description: 'A precise, quiet productivity mouse built for people who work all day.',
+    specifications: [
+      { label: 'Sensor', value: '8000 DPI' },
+      { label: 'Scroll', value: 'MagSpeed electromagnetic' },
+      { label: 'Multi-device', value: 'Up to 3 (Flow)' },
+      { label: 'Charging', value: 'USB-C' },
+    ],
+    availability: 'In Stock',
   }),
   P({
     id: 'yoga-mat',
@@ -395,7 +530,14 @@ export const PRODUCTS: Product[] = [
       '68" long x 24" wide',
       'Free yoga class included',
     ],
-    about: 'A cushioned, non-slip mat with vivid prints for yoga and floor workouts.',
+    description: 'A cushioned, non-slip mat with vivid prints for yoga and floor workouts.',
+    specifications: [
+      { label: 'Thickness', value: '6 mm' },
+      { label: 'Dimensions', value: '68" x 24"' },
+      { label: 'Surface', value: 'Textured non-slip' },
+      { label: 'Material', value: 'PVC' },
+    ],
+    availability: 'In Stock',
   }),
   P({
     id: 'olive-oil',
@@ -414,7 +556,14 @@ export const PRODUCTS: Product[] = [
       'Great for cooking and finishing',
       'Non-GMO verified',
     ],
-    about: 'A versatile, fruity extra virgin olive oil for everyday cooking.',
+    description: 'A versatile, fruity extra virgin olive oil for everyday cooking.',
+    specifications: [
+      { label: 'Size', value: '33.8 fl oz' },
+      { label: 'Type', value: 'Extra virgin' },
+      { label: 'Origin', value: 'California' },
+      { label: 'Non-GMO', value: 'Verified' },
+    ],
+    availability: 'In Stock',
   }),
   P({
     id: 'toothbrush',
@@ -435,7 +584,203 @@ export const PRODUCTS: Product[] = [
       '2-minute timer with quadrant pacing',
       'Rechargeable with one brush head',
     ],
-    about: 'A dentist-favorite electric toothbrush with a pressure sensor and timer.',
+    description: 'A dentist-favorite electric toothbrush with a pressure sensor and timer.',
+    specifications: [
+      { label: 'Modes', value: 'Daily Clean' },
+      { label: 'Timer', value: '2-min, quadrant' },
+      { label: 'Sensor', value: 'Pressure' },
+      { label: 'Battery', value: 'Rechargeable' },
+    ],
+    availability: 'In Stock',
+  }),
+  P({
+    id: 'webcam',
+    title: 'Logitech C920x HD Pro Webcam, 1080p',
+    brand: 'Logitech',
+    category: 'Electronics',
+    price: 59.99,
+    listPrice: 79.99,
+    rating: 4.7,
+    reviews: 65400,
+    prime: true,
+    colors: ['Black'],
+    tile: { emoji: '📷', from: '#26262b', to: '#44444d' },
+    bullets: [
+      'Full HD 1080p/30fps video calling',
+      'Dual mics with stereo audio',
+      'Automatic light correction',
+      'Works with Zoom, Teams, Meet',
+    ],
+    description: 'A reliable 1080p webcam with sharp video and clear stereo sound for calls and streaming.',
+    specifications: [
+      { label: 'Resolution', value: '1080p / 30fps' },
+      { label: 'Mic', value: 'Dual stereo' },
+      { label: 'Focus', value: 'Autofocus' },
+      { label: 'Mount', value: 'Clip + tripod thread' },
+    ],
+    availability: 'In Stock',
+  }),
+  P({
+    id: 'dumbbells',
+    title: 'Amazon Basics Neoprene Dumbbell Hand Weights (Pair)',
+    brand: 'Amazon Basics',
+    category: 'Sports',
+    price: 21.99,
+    listPrice: 27.99,
+    rating: 4.7,
+    reviews: 48700,
+    prime: true,
+    colors: ['10 lb', '15 lb', '20 lb'],
+    tile: { emoji: '🏋️', from: '#2a2a2a', to: '#4a4a4a' },
+    bullets: [
+      'Neoprene coating for a secure, comfortable grip',
+      'Hexagon shape prevents rolling',
+      'Color-coded by weight',
+      'Great for home workouts',
+    ],
+    description: 'Neoprene-coated hand weights with a no-roll hex shape for home strength training.',
+    specifications: [
+      { label: 'Coating', value: 'Neoprene' },
+      { label: 'Shape', value: 'Hexagon' },
+      { label: 'Sold as', value: 'Pair' },
+      { label: 'Grip', value: 'Textured' },
+    ],
+    availability: 'In Stock',
+  }),
+  P({
+    id: 'moisturizer',
+    title: 'CeraVe Daily Moisturizing Lotion for Dry Skin, 19 oz',
+    brand: 'CeraVe',
+    category: 'Beauty',
+    price: 14.97,
+    listPrice: 18.99,
+    rating: 4.8,
+    reviews: 92100,
+    prime: true,
+    badge: 'Best Seller',
+    colors: ['19 fl oz'],
+    tile: { emoji: '🧴', from: '#3a5a6a', to: '#5a8aa0' },
+    bullets: [
+      'Lightweight, oil-free hydration for 24 hours',
+      '3 essential ceramides restore the skin barrier',
+      'Hyaluronic acid retains moisture',
+      'Developed with dermatologists',
+    ],
+    description: 'A derm-developed daily lotion that hydrates and restores the skin barrier without greasiness.',
+    specifications: [
+      { label: 'Size', value: '19 fl oz' },
+      { label: 'Key actives', value: '3 ceramides, Hyaluronic Acid' },
+      { label: 'Skin type', value: 'Normal to dry' },
+      { label: 'Fragrance', value: 'Fragrance-free' },
+    ],
+    availability: 'In Stock',
+  }),
+  P({
+    id: 'tshirt',
+    title: "Hanes Men's ComfortSoft Short Sleeve T-Shirt (4-Pack)",
+    brand: 'Hanes',
+    category: 'Fashion',
+    price: 19.99,
+    rating: 4.6,
+    reviews: 73400,
+    prime: true,
+    colors: ['White', 'Black', 'Grey', 'Navy'],
+    tile: { emoji: '👕', from: '#30486a', to: '#50709a' },
+    bullets: [
+      'Soft, breathable ComfortSoft cotton',
+      'Tag-free neck for comfort',
+      'Durable, stays soft after washes',
+      'Value 4-pack',
+    ],
+    description: 'A value four-pack of soft, breathable tees with a tag-free neck for everyday wear.',
+    specifications: [
+      { label: 'Pack', value: '4 shirts' },
+      { label: 'Material', value: '100% cotton' },
+      { label: 'Neck', value: 'Tag-free crew' },
+      { label: 'Care', value: 'Machine wash' },
+    ],
+    availability: 'In Stock',
+  }),
+  P({
+    id: 'psych-money',
+    title: 'The Psychology of Money by Morgan Housel',
+    brand: 'Harriman House',
+    category: 'Books',
+    price: 13.29,
+    listPrice: 19.99,
+    rating: 4.7,
+    reviews: 84300,
+    prime: true,
+    colors: ['Paperback', 'Hardcover', 'Kindle'],
+    tile: { emoji: '📗', from: '#1f5f6f', to: '#2f8a9a' },
+    bullets: [
+      '19 short stories on how people think about money',
+      'Timeless lessons on wealth and happiness',
+      'Over 5 million copies sold',
+      'By Morgan Housel',
+    ],
+    description: 'Nineteen short stories exploring the strange ways people think about money and wealth.',
+    specifications: [
+      { label: 'Author', value: 'Morgan Housel' },
+      { label: 'Format', value: 'Paperback' },
+      { label: 'Pages', value: '256' },
+      { label: 'Publisher', value: 'Harriman House' },
+    ],
+    availability: 'In Stock',
+  }),
+  P({
+    id: 'coffee-beans',
+    title: 'Starbucks Pike Place Roast Ground Coffee, 28 oz',
+    brand: 'Starbucks',
+    category: 'Grocery',
+    price: 18.49,
+    listPrice: 22.99,
+    rating: 4.8,
+    reviews: 56200,
+    prime: true,
+    colors: ['Medium Roast'],
+    tile: { emoji: '☕', from: '#2a1f1a', to: '#5a3f30' },
+    bullets: [
+      'Smooth, balanced medium roast',
+      'Notes of cocoa and toasted nuts',
+      '100% arabica beans',
+      'Resealable 28 oz bag',
+    ],
+    description: 'A smooth, well-rounded medium roast with subtle cocoa and toasted-nut notes.',
+    specifications: [
+      { label: 'Size', value: '28 oz' },
+      { label: 'Roast', value: 'Medium' },
+      { label: 'Beans', value: '100% Arabica' },
+      { label: 'Grind', value: 'Ground' },
+    ],
+    availability: 'In Stock',
+  }),
+  P({
+    id: 'board-game',
+    title: 'Catan Board Game (Base Game) 5th Edition',
+    brand: 'Catan Studio',
+    category: 'Toys & Games',
+    price: 44.99,
+    listPrice: 55.0,
+    rating: 4.8,
+    reviews: 47800,
+    prime: true,
+    colors: ['Base Game'],
+    tile: { emoji: '🎲', from: '#6a4a1f', to: '#9a7a3f' },
+    bullets: [
+      'Trade, build, and settle the island of Catan',
+      '3–4 players, 60+ minutes',
+      'Different every time you play',
+      'Modern classic strategy game',
+    ],
+    description: 'The modern classic of trading and building — a different island every game.',
+    specifications: [
+      { label: 'Players', value: '3–4' },
+      { label: 'Play time', value: '60+ min' },
+      { label: 'Age', value: '10+' },
+      { label: 'Edition', value: '5th' },
+    ],
+    availability: 'Only 8 left in stock',
   }),
 ]
 
