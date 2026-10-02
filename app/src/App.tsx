@@ -31,6 +31,7 @@ export default function App() {
       <ScrollToTop />
       {!bare && <Header />}
       <main style={{ minHeight: '60vh' }}>
+        <div className="route-fade" key={pathname}>
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/s" element={<Search />} />
@@ -72,6 +73,7 @@ export default function App() {
           <Route path="/signin" element={<SignIn />} />
           <Route path="*" element={<Home />} />
         </Routes>
+        </div>
       </main>
       {!bare && <Footer />}
     </>

@@ -1,6 +1,8 @@
 import { Link } from 'react-router-dom'
 import { useStore, orderStatus } from '../store/store'
+import { byId } from '../data/products'
 import { Price } from '../components/bits'
+import ProductImage from '../components/ProductImage'
 
 export default function Orders() {
   const { orders } = useStore()
@@ -58,10 +60,12 @@ export default function Orders() {
                 {orderStatus(o).label}
               </span>
             </div>
-            {o.items.map((it) => (
+            {o.items.map((it) => {
+              const p = byId(it.id)
+              return (
               <div className="order-item" key={it.id + it.color}>
-                <Link to={`/p/${it.id}`} className="oi-thumb" style={{ background: '#eee' }}>
-                  {it.emoji}
+                <Link to={`/p/${it.id}`} className="oi-thumb" style={{ overflow: 'hidden', borderRadius: 6 }}>
+                  {p ? <ProductImage p={p} size="sm" /> : <span>{it.emoji}</span>}
                 </Link>
                 <div>
                   <Link to={`/p/${it.id}`}>{it.title}</Link>
@@ -75,7 +79,8 @@ export default function Orders() {
                   </div>
                 </div>
               </div>
-            ))}
+              )
+            })}
             <hr className="hr" />
             <div className="flex between">
               <span className="note">

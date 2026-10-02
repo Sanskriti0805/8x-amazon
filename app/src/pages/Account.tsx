@@ -2,7 +2,7 @@ import { Link, useNavigate } from 'react-router-dom'
 import { useStore } from '../store/store'
 
 export default function Account() {
-  const { user, orders, signOut } = useStore()
+  const { user, orders, address, signOut } = useStore()
   const nav = useNavigate()
 
   // RequireAuth guarantees a user, but guard for type-safety.
@@ -23,8 +23,7 @@ export default function Account() {
   const cards = [
     { emoji: '📦', title: 'Your Orders', desc: 'Track, return, or buy things again', to: '/orders' },
     { emoji: '🛒', title: 'Your Cart', desc: 'See the items in your cart', to: '/cart' },
-    { emoji: '🏠', title: 'Addresses', desc: 'Edit addresses for orders', to: '/account' },
-    { emoji: '🔒', title: 'Login & Security', desc: 'Edit name, email, and password', to: '/account' },
+    { emoji: '🔍', title: 'Keep shopping', desc: 'Browse the latest deals', to: '/s?k=deals' },
   ]
 
   return (
@@ -53,6 +52,33 @@ export default function Account() {
         ))}
       </div>
 
+      <div className="account-grid mt16" style={{ gridTemplateColumns: '1fr 1fr' }}>
+        <div className="panel">
+          <div className="flex between items-center">
+            <h3 style={{ margin: 0 }}>Login &amp; security</h3>
+          </div>
+          <div className="note mt8">
+            <b style={{ color: 'var(--text)' }}>{user.name}</b>
+            <br />
+            {user.email}
+          </div>
+        </div>
+        <div className="panel">
+          <div className="flex between items-center">
+            <h3 style={{ margin: 0 }}>Default address</h3>
+          </div>
+          {address ? (
+            <div className="note mt8">
+              {address.name}
+              <br />
+              {address.line1}, {address.city}, {address.state} {address.zip}
+            </div>
+          ) : (
+            <p className="note mt8">No saved address yet — it's set during checkout.</p>
+          )}
+        </div>
+      </div>
+
       <div className="panel mt16">
         <div className="flex between items-center">
           <h3 style={{ margin: 0 }}>Recent orders</h3>
@@ -62,7 +88,8 @@ export default function Account() {
           <p className="note mt8">You haven't placed any orders yet.</p>
         ) : (
           <p className="note mt8">
-            You have {orders.length} order{orders.length !== 1 ? 's' : ''}. Most recent: {orders[0].id}.
+            You have {orders.length} order{orders.length !== 1 ? 's' : ''}. Most recent:{' '}
+            <Link to={`/orders/${orders[0].id}`}>{orders[0].id}</Link>.
           </p>
         )}
       </div>

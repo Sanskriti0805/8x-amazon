@@ -39,6 +39,28 @@ button { font-family: inherit; cursor: pointer; }
 
 img { display: block; }
 
+/* Accessible keyboard focus (mouse clicks stay clean) */
+a:focus-visible,
+button:focus-visible,
+input:focus-visible,
+select:focus-visible,
+[tabindex]:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+/* Subtle page transition on route change */
+@keyframes routeFade {
+  from { opacity: 0; transform: translateY(6px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.route-fade { animation: routeFade 0.22s ease both; }
+
+@media (prefers-reduced-motion: reduce) {
+  * { animation-duration: 0.001ms !important; transition-duration: 0.001ms !important; }
+}
+
 .wrap { max-width: var(--maxw); margin: 0 auto; padding: 0 16px; }
 
 /* ---------- Header ---------- */
@@ -183,8 +205,10 @@ img { display: block; }
   padding: 8px 16px;
   font-size: 14px;
   color: var(--text);
+  transition: background 0.12s ease, box-shadow 0.12s ease, transform 0.06s ease;
 }
 .btn:hover { background: #f7fafa; }
+.btn:active { transform: translateY(1px); }
 .btn-yellow {
   background: var(--accent);
   border-color: #fcd200;

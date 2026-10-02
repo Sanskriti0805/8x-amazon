@@ -1,6 +1,8 @@
 import { Link, useLocation } from 'react-router-dom'
 import { useStore } from '../store/store'
+import { byId } from '../data/products'
 import { Price } from '../components/bits'
+import ProductImage from '../components/ProductImage'
 
 export default function Confirmation() {
   const { state } = useLocation() as { state?: { orderId?: string } }
@@ -38,10 +40,12 @@ export default function Confirmation() {
       <div className="cart-layout">
         <div className="panel">
           <h2 style={{ marginTop: 0 }}>Items in this order</h2>
-          {order.items.map((it) => (
+          {order.items.map((it) => {
+            const p = byId(it.id)
+            return (
             <div className="order-item" key={it.id + it.color}>
-              <div className="oi-thumb" style={{ background: '#eee' }}>
-                {it.emoji}
+              <div className="oi-thumb" style={{ overflow: 'hidden', borderRadius: 6 }}>
+                {p ? <ProductImage p={p} size="sm" /> : <span>{it.emoji}</span>}
               </div>
               <div>
                 <div>{it.title}</div>
@@ -51,7 +55,8 @@ export default function Confirmation() {
                 <Price value={it.price * it.qty} />
               </div>
             </div>
-          ))}
+            )
+          })}
         </div>
         <aside className="panel">
           <h3 style={{ marginTop: 0 }}>Order Summary</h3>
